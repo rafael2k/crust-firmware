@@ -1,0 +1,5 @@
+crust-firmware (0.3-1) experimental; urgency=medium
+
+  * Initial packaging. Closes: #979326.
+
+ -- Nicolas Boulenguez <nicolas@debian.org>  Mon, 21 Dec 2020 07:50:27 +0000

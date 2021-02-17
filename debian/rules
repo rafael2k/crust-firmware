@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+
+verbose := $(if $(filter terse,$(DEB_BUILD_OPTIONS)),,V=1)
+
+platforms := pinephone
+# pinephone: Arnaud Ferraris <arnaud.ferraris@gmail.com>
+
+%:
+	dh $@
+
+override_dh_auto_build: $(platforms)
+$(platforms):
+	dh_auto_build -- $(verbose) TGT=build/$@ $@_defconfig
+	dh_auto_build -- $(verbose) TGT=build/$@ CROSS_COMPILE=or1k-elf- scp
+
+override_dh_auto_install: $(addprefix install-,$(platforms))
+install-%:
+	install build/$*/scp.bin -Dtdebian/crust-firmware/usr/lib/crust-firmware/$* -m644

@@ -1,0 +1,32 @@
+Source: crust-firmware
+Section: admin
+Priority: optional
+Maintainer: Nicolas Boulenguez <nicolas@debian.org>
+Uploaders:
+ Jonas Smedegaard <dr@jones.dk>,
+ Arnaud Ferraris <arnaud.ferraris@gmail.com>,
+Standards-Version: 4.5.1
+Build-Depends:
+ bison,
+ debhelper-compat (= 13),
+ flex,
+ gcc-or1k-elf,
+Rules-Requires-Root: no
+Homepage: https://github.com/crust-firmware/crust
+Vcs-Browser: https://salsa.debian.org/debian/crust-firmware
+Vcs-Git: https://salsa.debian.org/debian/crust-firmware.git
+
+Package: crust-firmware
+Architecture: all
+Depends: ${misc:Depends}
+Description: SCP firmware for Allwinner sunxi boards
+ Some System on a Chip (SoC) computers, also known as single-board,
+ embed a dedicated processor called a System Control Processor (SCP)
+ which abstracts power and system management tasks away from
+ application processors.
+ .
+ Crust replaces the proprietary firmware on the Allwinner's AR100 SCP,
+ found in sunxi boards like Banana/Orange/Lichee Pi or Pinebook/phone.
+ .
+ There is usually no need to install this package.  The same contents
+ are more conveniently available from the u-boot-sunxi package.

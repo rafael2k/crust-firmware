@@ -1,0 +1,2 @@
+# The firmware is intended for u-boot, not the Linux kernel.
+wrong-section-according-to-package-name crust-firmware => kernel
