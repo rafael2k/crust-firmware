@@ -5,6 +5,9 @@ verbose := $(if $(filter terse,$(DEB_BUILD_OPTIONS)),,V=1)
 platforms := pinephone
 # pinephone: Arnaud Ferraris <arnaud.ferraris@gmail.com>
 
+# Vagrant Cascadian <vagrant@debian.org>
+platforms += pinebook pine64_plus
+
 %:
 	dh $@
 
