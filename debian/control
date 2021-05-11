@@ -18,6 +18,7 @@ Vcs-Git: https://salsa.debian.org/debian/crust-firmware.git
 
 Package: crust-firmware
 Architecture: all
+Multi-Arch: foreign
 Depends: ${misc:Depends}
 Description: SCP firmware for Allwinner sunxi boards
  Some System on a Chip (SoC) computers, also known as single-board,

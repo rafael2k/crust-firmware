@@ -1,3 +1,11 @@
+crust-firmware (0.3-2) experimental; urgency=medium
+
+  [ Vagrant Cascadian <vagrant@debian.org> ]
+  * Set Multi-Arch: foreign, allowing an accurate list of
+    build-dependencies for the u-boot package.  Closes: #988257
+
+ -- Nicolas Boulenguez <nicolas@debian.org>  Tue, 11 May 2021 08:07:27 +0000
+
 crust-firmware (0.3-1) experimental; urgency=medium
 
   * Initial packaging. Closes: #979326.
