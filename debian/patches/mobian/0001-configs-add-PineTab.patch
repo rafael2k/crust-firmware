@@ -1,0 +1,21 @@
+From 634e1fc8a6385f357f09ba5463f14b0956726c20 Mon Sep 17 00:00:00 2001
+From: Arnaud Ferraris <arnaud.ferraris@collabora.com>
+Date: Thu, 27 May 2021 15:55:11 +0200
+Subject: [PATCH] configs: add PineTab
+
+---
+ configs/pinetab_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 configs/pinetab_defconfig
+
+diff --git a/configs/pinetab_defconfig b/configs/pinetab_defconfig
+new file mode 100644
+index 0000000..875ad02
+--- /dev/null
++++ b/configs/pinetab_defconfig
+@@ -0,0 +1,2 @@
++CONFIG_MFD_AXP20X=y
++# CONFIG_SERIAL is not set
+-- 
+2.30.2
+
