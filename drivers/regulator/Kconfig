@@ -1,5 +1,5 @@
 #
-# Copyright © 2017-2020 The Crust Firmware Authors.
+# Copyright © 2017-2021 The Crust Firmware Authors.
 # SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
 #
 
@@ -12,6 +12,96 @@ config REGULATOR_AXP803
 config REGULATOR_AXP805
 	bool
 	default MFD_AXP805
+
+config REGULATOR_GPIO
+	bool
+
+menuconfig REGULATOR_GPIO_CPU
+	bool "GPIO-controlled CPU power supply"
+	select REGULATOR_GPIO
+	help
+		Select this option if your board supplies power to the
+		CPU (VDD-CPUX) via a GPIO-controlled voltage regulator.
+
+		This regulator will be disabled during both the suspend
+		and shutdown procedures.
+
+		Note: This GPIO pin must NOT also control VDD-SYS.
+		VDD-SYS must remain powered while the system is asleep.
+
+if REGULATOR_GPIO_CPU
+
+config REGULATOR_GPIO_CPU_PIN
+	int "GPIO pin (port L)"
+	default 8
+	range 0 31
+	help
+		Select the GPIO pin used to control the CPU supply.
+
+endif
+
+menuconfig REGULATOR_GPIO_DRAM
+	bool "GPIO-controlled DRAM power supply"
+	select REGULATOR_GPIO
+	help
+		Select this option if your board supplies power to the
+		DRAM (VCC-DRAM) via a GPIO-controlled voltage regulator.
+
+		This regulator will be disabled during the shutdown
+		procedure.
+
+if REGULATOR_GPIO_DRAM
+
+config REGULATOR_GPIO_DRAM_PIN
+	int "GPIO pin (port L)"
+	default 9
+	range 0 31
+	help
+		Select the GPIO pin used to control the DRAM supply.
+
+endif
+
+menuconfig REGULATOR_GPIO_VCC_PLL
+	bool "GPIO-controlled VCC-PLL power supply"
+	select REGULATOR_GPIO
+	help
+		Select this option if your board supplies power to the
+		PLLs (VCC-PLL) via a GPIO-controlled voltage regulator.
+
+		This regulator will be disabled during the shutdown
+		procedure.
+
+if REGULATOR_GPIO_VCC_PLL
+
+config REGULATOR_GPIO_VCC_PLL_PIN
+	int "GPIO pin (port L)"
+	default 0
+	range 0 31
+	help
+		Select the GPIO pin used to control the VCC-PLL supply.
+
+endif
+
+menuconfig REGULATOR_GPIO_VDD_SYS
+	bool "GPIO-controlled VDD-SYS power supply"
+	select REGULATOR_GPIO
+	help
+		Select this option if your board supplies power to the
+		SoC (VDD-SYS) via a GPIO-controlled voltage regulator.
+
+		This regulator will be disabled during the shutdown
+		procedure.
+
+if REGULATOR_GPIO_VDD_SYS
+
+config REGULATOR_GPIO_VDD_SYS_PIN
+	int "GPIO pin (port L)"
+	default 8
+	range 0 31
+	help
+		Select the GPIO pin used to control the VDD-SYS supply.
+
+endif
 
 config REGULATOR_SY8106A
 	bool "Silergy SY8106A voltage regulator"

@@ -1,0 +1,71 @@
+#
+# Copyright © 2020-2021 The Crust Firmware Authors.
+# SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
+#
+
+config CIR
+	bool "CIR (infrared) receiver"
+	help
+		Listen for input from an infrared remote controller or
+		keyboard. This can be used as a wakeup source.
+
+if CIR
+
+choice
+	bool "IR protocol"
+	default CIR_PROTO_RC6
+
+config CIR_PROTO_NEC
+	bool "NEC"
+	help
+		Select this if your remote speaks NEC.
+
+config CIR_PROTO_NECX
+	bool "Extended NEC"
+	help
+		Select this if your remote speaks extended NEC.
+
+config CIR_PROTO_RC6
+	bool "RC6"
+	help
+		Select this for standard RC6 MCE remotes.
+
+endchoice
+
+config CIR_WAKE_CODE
+	hex "Scan code for wakeup"
+	range 0x1 0xffffffff
+	default 0x800f040c
+	help
+		Choose the scan code that will wake the system when detected.
+
+		The default value will work with an RC6 MCE remote controller.
+
+config CIR_CLK_RATE
+	int
+	default 125000 if CIR_USE_OSC24M # 24 MHz divided by 192
+	default 32768
+	help
+		Provide the sample frequency used for protocol decoding.
+
+config CIR_USE_OSC24M
+	bool "Use OSC24M as parent clock"
+	help
+		Sometimes boards come without external 32768 Hz oscillator
+		and thus RTC use the internal RC oscilator as a source
+		for generating 32768 Hz clock. However, such clock is
+		not precise enough for IR signal decoding purposes.
+
+		Set this option to Y if your board doesn't have external
+		32768 Hz oscillator. Note that this increases power
+		consumption.
+
+config R_CIR_RX_PIN
+	int
+	default  9 if PLATFORM_H6
+	default 11 if PLATFORM_A64 || PLATFORM_H3
+	default 12 if PLATFORM_A83T
+	help
+		Provide the Port L pin number used by the CIR receiver.
+
+endif

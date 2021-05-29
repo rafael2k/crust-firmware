@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -13,6 +13,9 @@
 #include <clock/sun8i-r-ccu.h>
 #elif CONFIG(PLATFORM_A83T)
 #include <clock/sun8i-a83t-ccu.h>
+#include <clock/sun8i-r-ccu.h>
+#elif CONFIG(PLATFORM_H3)
+#include <clock/sun8i-h3-ccu.h>
 #include <clock/sun8i-r-ccu.h>
 #elif CONFIG(PLATFORM_H6)
 #include <clock/sun50i-h6-ccu.h>
@@ -29,10 +32,12 @@ extern const struct ccu ccu;
 extern const struct ccu r_ccu;
 
 void ccu_suspend(void);
+void ccu_suspend_cluster(uint32_t cluster);
 void ccu_resume(void);
+void ccu_resume_cluster(uint32_t cluster);
 void ccu_init(void);
 
-void r_ccu_suspend(void);
+void r_ccu_suspend(uint8_t depth);
 void r_ccu_resume(void);
 void r_ccu_init(void);
 

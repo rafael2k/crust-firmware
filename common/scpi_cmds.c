@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -11,6 +11,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <steps.h>
 #include <system.h>
 #include <util.h>
 #include <version.h>
@@ -85,11 +86,6 @@ scpi_cmd_get_scp_cap_handler(uint32_t *rx_payload UNUSED,
  * Handler for SCPI_CMD_SET_CSS_POWER: Set CSS power state.
  *
  * This sets the power state of a single core, its parent cluster, and the CSS.
- *
- * The power state provided by PSCI is already coordinated. Simply turn things
- * on from highest to lowest power level, then turn things off from lowest to
- * highest power level. This ensures no power domain is turned on before its
- * parent, and no power domain is turned off before any of its children.
  */
 static int
 scpi_cmd_set_css_power_handler(uint32_t *rx_payload,
@@ -97,29 +93,17 @@ scpi_cmd_set_css_power_handler(uint32_t *rx_payload,
                                uint16_t *tx_size UNUSED)
 {
 	uint32_t descriptor    = rx_payload[0];
-	uint8_t  core          = bitfield_get(descriptor, 0x00, 4);
-	uint8_t  cluster       = bitfield_get(descriptor, 0x04, 4);
-	uint8_t  core_state    = bitfield_get(descriptor, 0x08, 4);
-	uint8_t  cluster_state = bitfield_get(descriptor, 0x0c, 4);
-	uint8_t  css_state     = bitfield_get(descriptor, 0x10, 4);
+	uint32_t core          = bitfield_get(descriptor, 0x00, 4);
+	uint32_t cluster       = bitfield_get(descriptor, 0x04, 4);
+	uint32_t core_state    = bitfield_get(descriptor, 0x08, 4);
+	uint32_t cluster_state = bitfield_get(descriptor, 0x0c, 4);
+	uint32_t css_state     = bitfield_get(descriptor, 0x10, 4);
 	int err;
 
-	/* Do not check if the CSS should be turned on, as receiving this
-	 * command from an ARM CPU via PSCI implies that it is already on. */
-	if (cluster_state == SCPI_CSS_ON &&
-	    (err = css_set_cluster_state(cluster, cluster_state)))
+	err = css_set_power_state(cluster, core, core_state,
+	                          cluster_state, css_state);
+	if (err)
 		return err;
-	if ((err = css_set_core_state(cluster, core, core_state)))
-		return err;
-	if (cluster_state != SCPI_CSS_ON &&
-	    (err = css_set_cluster_state(cluster, cluster_state)))
-		return err;
-	if (css_state != SCPI_CSS_ON &&
-	    (err = css_set_css_state(css_state)))
-		return err;
-	/* Turning everything off means system suspend. */
-	if (css_state == SCPI_CSS_OFF)
-		system_suspend();
 
 	return SCPI_OK;
 }
@@ -136,14 +120,20 @@ static int
 scpi_cmd_get_css_power_handler(uint32_t *rx_payload UNUSED,
                                uint32_t *tx_payload, uint16_t *tx_size)
 {
-	uint8_t  clusters = css_get_cluster_count();
+	uint32_t clusters = css_get_cluster_count();
 	uint16_t descriptor;
+	int err;
 
 	/* Each cluster has its own power state descriptor. */
-	for (uint8_t i = 0; i < clusters; ++i) {
+	for (uint32_t i = 0; i < clusters; ++i) {
+		uint32_t state, online_cores;
+
+		if ((err = css_get_power_state(i, &state, &online_cores)))
+			return err;
+
 		descriptor = CLUSTER_ID(i) |
-		             CLUSTER_POWER_STATE(css_get_cluster_state(i)) |
-		             CORE_POWER_STATES(css_get_online_cores(i));
+		             CLUSTER_POWER_STATE(state) |
+		             CORE_POWER_STATES(online_cores);
 		/* Work around the hardware byte swapping, since this is an
 		 * array of elements each aligned to less than 4 bytes. */
 		((uint16_t *)tx_payload)[i ^ 1] = descriptor;
@@ -171,6 +161,9 @@ scpi_cmd_set_sys_power_handler(uint32_t *rx_payload,
 		system_reset();
 	else
 		return SCPI_E_PARAM;
+
+	/* Clear the current step during an orderly state transition. */
+	record_step(STEP_NONE);
 
 	return SCPI_OK;
 }

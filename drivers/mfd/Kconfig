@@ -1,5 +1,5 @@
 #
-# Copyright © 2020 The Crust Firmware Authors.
+# Copyright © 2020-2021 The Crust Firmware Authors.
 # SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
 #
 
@@ -10,6 +10,12 @@ config MFD_AXP20X
 		This driver enables both the power sequencing and
 		voltage regulator functionality of an AXP2xx or AXP8xx
 		series power management IC.
+
+comment "X-Powers PMIC will communicate via I2C"
+	depends on MFD_AXP20X && !RSB
+
+comment "X-Powers PMIC will communicate via RSB"
+	depends on MFD_AXP20X && RSB
 
 choice
 	bool "X-Powers PMIC variant"

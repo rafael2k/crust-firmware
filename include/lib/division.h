@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -7,6 +7,9 @@
 #define LIB_DIVISION_H
 
 #include <stdint.h>
+
+#define UDIV_ROUND(dividend, divisor) \
+	(((dividend) + (divisor) / 2) / (divisor))
 
 /**
  * Perform correctly-rounded unsigned division.

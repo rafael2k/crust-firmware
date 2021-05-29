@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -20,6 +20,7 @@ enum {
 	CLK_BUS_R_PWM,
 	CLK_BUS_R_UART,
 	CLK_BUS_R_I2C,
+	CLK_BUS_R_RSB,
 	CLK_BUS_R_CIR,
 	CLK_BUS_R_W1,
 	CLK_R_CIR,

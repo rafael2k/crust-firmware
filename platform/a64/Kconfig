@@ -1,5 +1,5 @@
 #
-# Copyright © 2017-2020 The Crust Firmware Authors.
+# Copyright © 2017-2021 The Crust Firmware Authors.
 # SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
 #
 
@@ -8,6 +8,8 @@ choice
 
 config SOC_A64
 	bool "A64"
+	select HAVE_RSB
+	select HAVE_UART4
 
 config SOC_H5
 	bool "H5"

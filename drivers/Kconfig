@@ -1,28 +1,18 @@
 #
-# Copyright © 2017-2020 The Crust Firmware Authors.
+# Copyright © 2017-2021 The Crust Firmware Authors.
 # SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
 #
 
 menu "Device drivers"
 
+source "dram/Kconfig"
+source "cir/Kconfig"
+source "clock/Kconfig"
 source "irq/Kconfig"
 source "regmap/Kconfig"
 source "mfd/Kconfig"
 source "pmic/Kconfig"
 source "regulator/Kconfig"
-
-config SERIAL
-	bool "Serial input/output support"
-	default y
-	help
-		Use a serial port (UART) for error logs and debugging.
-		Note that depending on the port and options selected,
-		this may interfere with other users of that serial port.
-
-		If you are unsure, use the default port and baud rate.
-
-if SERIAL
 source "serial/Kconfig"
-endif
 
 endmenu

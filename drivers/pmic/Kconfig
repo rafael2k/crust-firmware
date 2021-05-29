@@ -1,16 +1,21 @@
 #
-# Copyright © 2017-2020 The Crust Firmware Authors.
+# Copyright © 2017-2021 The Crust Firmware Authors.
 # SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
 #
 
 menu "Power management controllers"
 
+config PMIC
+	bool
+
 config PMIC_AXP803
 	bool
+	select PMIC
 	default MFD_AXP803
 
 config PMIC_AXP805
 	bool
+	select PMIC
 	default MFD_AXP805
 
 endmenu

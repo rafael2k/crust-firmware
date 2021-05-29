@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -36,6 +36,7 @@ enum {
 void hexdump(uintptr_t addr, uint32_t bytes);
 void log(const char *fmt, ...) ATTRIBUTE(format(printf, 1, 2));
 
+#define panic(...) (error(__VA_ARGS__), trap())
 #define error(...) log(LOG_STRING_ERROR __VA_ARGS__)
 #define warn(...)  log(LOG_STRING_WARNING __VA_ARGS__)
 #define info(...)  log(LOG_STRING_INFO __VA_ARGS__)
@@ -73,12 +74,12 @@ debug_print_battery(void)
 
 #if CONFIG(DEBUG_PRINT_LATENCY)
 
-void debug_print_latency(void);
+void debug_print_latency(uint8_t current_state);
 
 #else
 
 static inline void
-debug_print_latency(void)
+debug_print_latency(uint8_t current_state UNUSED)
 {
 }
 
@@ -92,6 +93,25 @@ void debug_print_sprs(void);
 
 static inline void
 debug_print_sprs(void)
+{
+}
+
+#endif
+
+#if CONFIG(DEBUG_VERIFY_DRAM)
+
+void dram_save_checksum(void);
+void dram_verify_checksum(void);
+
+#else
+
+static inline void
+dram_save_checksum(void)
+{
+}
+
+static inline void
+dram_verify_checksum(void)
 {
 }
 

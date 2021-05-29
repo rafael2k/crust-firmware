@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -18,8 +18,11 @@
 #define IRQ_R_PIO_PL 0x09
 #define IRQ_R_UART   0x0a
 #define IRQ_R_I2C    0x0b
+#define IRQ_R_RSB    0x0c
 #define IRQ_R_CIR_RX 0x0d
 #define IRQ_R_OWC    0x0e
 #define IRQ_R_PIO_PM 0x0f
+
+#define IRQ_MSGBOX   0x13
 
 #endif /* PLATFORM_IRQ_H */

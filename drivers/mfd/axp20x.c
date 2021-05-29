@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -17,11 +17,11 @@
 #if CONFIG(MFD_AXP803)
 #define IC_TYPE_VALUE 0x41
 #define I2C_ADDRESS   0x34
-#define RSB_RTADDR    0x2d
+#define RSB_ADDRESS   (0x2d << 16 | 0x3a3)
 #elif CONFIG(MFD_AXP805)
 #define IC_TYPE_VALUE 0x40
 #define I2C_ADDRESS   0x36
-#define RSB_RTADDR    0x2d
+#define RSB_ADDRESS   (0x3a << 16 | 0x745)
 #endif
 
 static int
@@ -61,6 +61,6 @@ const struct regmap_device axp20x = {
 	},
 	.map = {
 		.dev = CONFIG(RSB) ? &r_rsb.dev : &r_i2c.dev,
-		.id  = CONFIG(RSB) ? RSB_RTADDR : I2C_ADDRESS,
+		.id  = CONFIG(RSB) ? RSB_ADDRESS : I2C_ADDRESS,
 	},
 };

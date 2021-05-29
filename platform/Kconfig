@@ -1,5 +1,5 @@
 #
-# Copyright © 2017-2020 The Crust Firmware Authors.
+# Copyright © 2017-2021 The Crust Firmware Authors.
 # SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
 #
 
@@ -7,6 +7,7 @@ config PLATFORM
 	string
 	default "a64"  if PLATFORM_A64
 	default "a83t" if PLATFORM_A83T
+	default "h3"   if PLATFORM_H3
 	default "h6"   if PLATFORM_H6
 
 choice
@@ -15,14 +16,24 @@ choice
 config PLATFORM_A64
 	bool "A64/H5"
 	depends on ARCH_OR1K
+	select HAVE_DRAM_SUSPEND
 
 config PLATFORM_A83T
 	bool "A83T"
+	depends on ARCH_OR1K
+	select HAVE_RSB
+	select HAVE_UART4
+
+config PLATFORM_H3
+	bool "H3"
 	depends on ARCH_OR1K
 
 config PLATFORM_H6
 	bool "H6"
 	depends on ARCH_OR1K
+	select HAVE_DCXO
+	select HAVE_DRAM_SUSPEND
+	select HAVE_RSB
 
 endchoice
 

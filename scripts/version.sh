@@ -1,11 +1,11 @@
 #!/bin/sh -eu
 #
-# Copyright © 2020 The Crust Firmware Authors.
+# Copyright © 2020-2021 The Crust Firmware Authors.
 # SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
 #
 
 major=0
-minor=3
+minor=4
 patch=10000
 
 srcdir=$1
@@ -31,6 +31,7 @@ cat > "$output.tmp" << EOF
 #define VERSION_MAJOR $major
 #define VERSION_MINOR $minor
 #define VERSION_PATCH $patch
+#define VERSION_STRING "v${major}.${minor}.${patch}"
 EOF
 
 if ! test -f "$output" ||

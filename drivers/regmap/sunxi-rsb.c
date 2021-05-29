@@ -1,9 +1,8 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
-#include <debug.h>
 #include <error.h>
 #include <mmio.h>
 #include <util.h>
@@ -14,24 +13,22 @@
 
 #include "regmap.h"
 
-#define RSB_CTRL_REG     0x00
-#define RSB_CCR_REG      0x04
-#define RSB_INT_EN_REG   0x08
-#define RSB_STAT_REG     0x0c
-#define RSB_ADDR_REG     0x10
-#define RSB_DLEN_REG     0x18
-#define RSB_DATA_REG     0x1c
-#define RSB_LCR_REG      0x24
-#define RSB_PMCR_REG     0x28
-#define RSB_CMD_REG      0x2c
-#define RSB_SADDR_REG    0x30
+#define RSB_CTRL_REG   0x00
+#define RSB_CCR_REG    0x04
+#define RSB_INT_EN_REG 0x08
+#define RSB_STAT_REG   0x0c
+#define RSB_ADDR_REG   0x10
+#define RSB_DLEN_REG   0x18
+#define RSB_DATA_REG   0x1c
+#define RSB_LCR_REG    0x24
+#define RSB_PMCR_REG   0x28
+#define RSB_CMD_REG    0x2c
+#define RSB_SADDR_REG  0x30
 
-#define RSB_RTADDR(addr) ((addr) << 16)
+#define I2C_BCAST_ADDR 0
 
-#define I2C_BCAST_ADDR   0
-
-#define PMIC_MODE_REG    0x3e
-#define PMIC_MODE_VAL    0x7c
+#define PMIC_MODE_REG  0x3e
+#define PMIC_MODE_VAL  0x7c
 
 enum {
 	RSB_SRTA = 0xe8,
@@ -43,21 +40,13 @@ enum {
 	RSB_WR32 = 0x63,
 };
 
-static uint16_t
-sunxi_rsb_get_hwaddr(uint8_t rtaddr UNUSED)
-{
-	/* Currently only a primary PMIC is supported. */
-	assert(rtaddr == 0x2d);
-
-	return 0x3a3;
-}
-
 static int
-sunxi_rsb_do_command(const struct simple_device *self, uint32_t addr,
-                     uint32_t cmd)
+sunxi_rsb_do_command(const struct regmap *map, uint32_t cmd)
 {
+	const struct simple_device *self = to_simple_device(map->dev);
+
 	mmio_write_32(self->regs + RSB_CMD_REG, cmd);
-	mmio_write_32(self->regs + RSB_SADDR_REG, addr);
+	mmio_write_32(self->regs + RSB_SADDR_REG, map->id);
 	mmio_write_32(self->regs + RSB_CTRL_REG, BIT(7));
 
 	mmio_pollz_32(self->regs + RSB_CTRL_REG, BIT(7));
@@ -69,11 +58,8 @@ sunxi_rsb_do_command(const struct simple_device *self, uint32_t addr,
 static int
 sunxi_rsb_prepare(const struct regmap *map)
 {
-	const struct simple_device *self = to_simple_device(map->dev);
-	uint32_t addr = RSB_RTADDR(map->id) | sunxi_rsb_get_hwaddr(map->id);
-
 	/* Set the device's runtime address. */
-	return sunxi_rsb_do_command(self, addr, RSB_SRTA);
+	return sunxi_rsb_do_command(map, RSB_SRTA);
 }
 
 static int
@@ -84,7 +70,7 @@ sunxi_rsb_read(const struct regmap *map, uint8_t addr, uint8_t *data)
 
 	mmio_write_32(self->regs + RSB_ADDR_REG, addr);
 
-	if ((err = sunxi_rsb_do_command(self, RSB_RTADDR(map->id), RSB_RD8)))
+	if ((err = sunxi_rsb_do_command(map, RSB_RD8)))
 		return err;
 
 	*data = mmio_read_32(self->regs + RSB_DATA_REG);
@@ -100,7 +86,7 @@ sunxi_rsb_write(const struct regmap *map, uint8_t addr, uint8_t data)
 	mmio_write_32(self->regs + RSB_ADDR_REG, addr);
 	mmio_write_32(self->regs + RSB_DATA_REG, data);
 
-	return sunxi_rsb_do_command(self, RSB_RTADDR(map->id), RSB_WR8);
+	return sunxi_rsb_do_command(map, RSB_WR8);
 }
 
 static void
@@ -163,14 +149,14 @@ const struct simple_device r_rsb = {
 		{
 			.dev   = &r_pio.dev,
 			.id    = SUNXI_GPIO_PIN(0, 0),
-			.drive = DRIVE_10mA,
+			.drive = DRIVE_30mA,
 			.mode  = 2,
 			.pull  = PULL_UP,
 		},
 		{
 			.dev   = &r_pio.dev,
 			.id    = SUNXI_GPIO_PIN(0, 1),
-			.drive = DRIVE_10mA,
+			.drive = DRIVE_30mA,
 			.mode  = 2,
 			.pull  = PULL_UP,
 		},

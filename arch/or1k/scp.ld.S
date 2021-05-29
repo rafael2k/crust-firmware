@@ -1,8 +1,9 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
+#include <platform/css.h>
 #include <platform/memory.h>
 
 #if CONFIG(COMPILE_TEST)
@@ -22,6 +23,14 @@ MEMORY {
 SECTIONS
 {
   ASSERT(FIRMWARE_BASE >= SRAM_A2_BASE, "Firmware must be placed in SRAM A2")
+  ASSERT(FIRMWARE_LIMIT <= SRAM_A2_LIMIT, "Firmware must fit inside SRAM A2")
+
+  /*
+   * If addresses within the firmware differ only in their lower 16 bits, a
+   * single l.movhi instruction can be shared by multiple symbol references.
+   */
+  ASSERT(FIRMWARE_BASE >> 16 == (FIRMWARE_LIMIT - 1) >> 16,
+         "Firmware must not cross a 64k address boundary")
 
   . = FIRMWARE_BASE;
 
@@ -41,7 +50,13 @@ SECTIONS
     . = ALIGN(4);
   } >SRAM_A2
 
-  ASSERT(SIZEOF(.data) == 0, "Global data must be constant or set at runtime")
+  /*
+   * With few exceptions, global data should be constant or initialized during
+   * boot. Before changing this value, verify the firmware can recover from a
+   * crash even after the new data is modified.
+   */
+  ASSERT(SIZEOF(.data) == MAX_CLUSTERS * MAX_CORES_PER_CLUSTER + 0x08,
+         "Changes to .data persist after an exception!")
 
   .bss . : ALIGN(4) {
     __bss_start = .;
@@ -57,7 +72,6 @@ SECTIONS
 #if !CONFIG(COMPILE_TEST)
   ASSERT(. <= FIRMWARE_LIMIT, "Firmware overflows allocated memory area")
   ASSERT(. <= SCPI_MEM_BASE, "Firmware overflows into SCPI shared memory")
-  ASSERT(. <= SRAM_A2_LIMIT, "Firmware overflows SRAM A2")
 #endif
 
   __scpi_mem = SCPI_MEM_BASE;

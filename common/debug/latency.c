@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 The Crust Firmware Authors.
+ * Copyright © 2020-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -15,10 +15,8 @@ static uint32_t iterations;
 static uint8_t  last_state;
 
 void
-debug_print_latency(void)
+debug_print_latency(uint8_t current_state)
 {
-	uint8_t current_state = get_system_state();
-
 	if (current_state != last_state) {
 		cycles     = counter_read();
 		iterations = 0;

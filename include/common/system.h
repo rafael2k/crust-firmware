@@ -1,40 +1,19 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
 #ifndef COMMON_SYSTEM_H
 #define COMMON_SYSTEM_H
 
-#include <stdbool.h>
 #include <stdint.h>
 
 enum {
-	SYSTEM_INVALID,  /**< Uninitialized state machine (initial state). */
-	SYSTEM_ACTIVE,   /**< ARM CPUs are running firmware or an OS. */
-	SYSTEM_SUSPEND,  /**< Transition from active to inactive. */
-	SYSTEM_INACTIVE, /**< ARM CPUs are not running; RAM is preserved. */
-	SYSTEM_RESUME,   /**< Transition from inactive to active. */
-	SYSTEM_SHUTDOWN, /**< Transition from active to off. */
-	SYSTEM_OFF,      /**< ARM CPUs are not running; RAM is invalid. */
-	SYSTEM_REBOOT,   /**< Board-level reset is in progress. */
-	SYSTEM_RESET,    /**< SoC-level reset is in progress (final state). */
+	SD_NONE,    /**< Perform no extra suspend actions. */
+	SD_OSC24M,  /**< Power down the high-speed oscillator and PLLs. */
+	SD_AVCC,    /**< Gate the AVCC power domain. */
+	SD_VDD_SYS, /**< Gate and reset the VDD_SYS power domain. */
 };
-
-/**
- * Get the current system state.
- */
-uint8_t get_system_state(void);
-
-/**
- * Check if the system is in a state where it can be woken up.
- */
-bool system_can_wake(void) ATTRIBUTE(pure);
-
-/**
- * Check if the system is in a state where the main CPUs are executing.
- */
-bool system_is_running(void) ATTRIBUTE(pure);
 
 /**
  * Perform system state management.
@@ -48,36 +27,39 @@ noreturn void system_state_machine(uint32_t exception);
 /**
  * Reboot the board, including the SoC and external peripherals.
  *
- * May be called at any time.
+ * Must only be called while the system is awake.
  */
 void system_reboot(void);
 
 /**
  * Reset the SoC, including all CPUs and internal peripherals.
  *
- * May be called at any time.
+ * Must only be called while the system is awake.
  */
 void system_reset(void);
 
 /**
  * Shut down the SoC, and turn off all possible power domains.
  *
- * Must only be called while the system is active.
+ * Must only be called while the system is awake.
  */
 void system_shutdown(void);
 
 /**
  * Suspend the SoC, and turn off all non-wakeup power domains.
  *
- * Must only be called while the system is active.
+ * Must only be called while the system is awake.
  */
 void system_suspend(void);
 
 /**
- * Wake up the SoC, and turn on previously-disabled power domains.
+ * Wake the system.
  *
- * Should only be called while the system is inactive (suspended).
+ * Transition to a state where the rich OS is awake and running, by resetting
+ * the SoC or the entire board if necessary.
+ *
+ * May be called at any time.
  */
-void system_wakeup(void);
+void system_wake(void);
 
 #endif /* COMMON_SYSTEM_H */

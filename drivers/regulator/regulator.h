@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -11,8 +11,8 @@
 #include <stdint.h>
 
 struct regulator_driver_ops {
-	int (*get_state)(const struct device *dev, uint8_t id);
-	int (*set_state)(const struct device *dev, uint8_t id, bool enable);
+	int (*get_state)(const struct regulator_handle *handle, bool *enabled);
+	int (*set_state)(const struct regulator_handle *handle, bool enable);
 };
 
 struct regulator_driver {

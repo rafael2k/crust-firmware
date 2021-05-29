@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -17,22 +17,24 @@
 #define SYS_STATUS_REG 0x06
 
 static int
-sy8106a_get_state(const struct device *dev, uint8_t id UNUSED)
+sy8106a_get_state(const struct regulator_handle *handle, bool *enabled)
 {
-	const struct regmap_device *self = to_regmap_device(dev);
+	const struct regmap_device *self = to_regmap_device(handle->dev);
 	uint8_t val;
 	int err;
 
 	if ((err = regmap_read(&self->map, VOUT_COM_REG, &val)))
 		return err;
 
-	return !(val & BIT(0));
+	*enabled = !(val & BIT(0));
+
+	return SUCCESS;
 }
 
 static int
-sy8106a_set_state(const struct device *dev, uint8_t id UNUSED, bool enabled)
+sy8106a_set_state(const struct regulator_handle *handle, bool enabled)
 {
-	const struct regmap_device *self = to_regmap_device(dev);
+	const struct regmap_device *self = to_regmap_device(handle->dev);
 	int err;
 
 	if ((err = regmap_update_bits(&self->map, VOUT_COM_REG,

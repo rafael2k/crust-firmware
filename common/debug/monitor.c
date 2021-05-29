@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 The Crust Firmware Authors.
+ * Copyright © 2020-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -13,7 +13,7 @@
 #include <system.h>
 #include <mfd/axp20x.h>
 
-#define MAX_LENGTH 19 /* "m xxxxxxxx xxxxxxxx" */
+#define MAX_LENGTH 23 /* "m 0x???????? 0x????????" */
 
 static char buffer[MAX_LENGTH + 1];
 static uint8_t length;
@@ -42,6 +42,8 @@ parse_hex(const char **str, uint32_t *num)
 			digit = c - '0';
 		else if (c - 'a' < 6)
 			digit = c - ('a' - 10);
+		else if (c == 'x')
+			digit = 0;
 		else
 			break;
 		++s;
@@ -97,14 +99,9 @@ run_command(const char *cmd)
 		}
 		return;
 #endif
-	case 's':
-		/* System: "sb", "sr", or "sw". */
-		if (*cmd == 'b')
-			system_reboot();
-		else if (*cmd == 'r')
-			system_reset();
-		else if (*cmd == 'w')
-			system_wakeup();
+	case 'w':
+		/* Wake: "w". */
+		system_wake();
 		return;
 	}
 }

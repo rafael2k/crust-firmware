@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -7,9 +7,13 @@
 #define DRIVERS_CLOCK_SUN50I_H6_CCU_H
 
 enum {
+	CLK_PLL_DDR0,
 	CLK_PLL_PERIPH0,
 	CLK_APB2,
+	CLK_MBUS,
 	CLK_BUS_MSGBOX,
+	CLK_DRAM,
+	CLK_BUS_DRAM,
 	CLK_BUS_PIO,
 #if CONFIG(SERIAL_DEV_UART0)
 	CLK_BUS_UART0,

@@ -1,5 +1,5 @@
 #
-# Copyright © 2017-2020 The Crust Firmware Authors.
+# Copyright © 2017-2021 The Crust Firmware Authors.
 # SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
 #
 
@@ -19,7 +19,7 @@ CC		 = $(CROSS_COMPILE)gcc
 OBJCOPY		 = $(CROSS_COMPILE)objcopy
 
 LEX		 = lex
-YACC		 = yacc
+YACC		 = bison
 
 COMMON_CFLAGS	 = -Os -pipe -std=c11 \
 		   -fdata-sections \
@@ -62,7 +62,6 @@ HOSTLDLIBS	 =
 
 AFLAGS		 = -Wa,--fatal-warnings
 CFLAGS		 = $(COMMON_CFLAGS) \
-		   -ffixed-r2 \
 		   -ffreestanding \
 		   -flto \
 		   -fno-asynchronous-unwind-tables \
@@ -93,6 +92,7 @@ GOALS		:= $(if $(MAKECMDGOALS),$(MAKECMDGOALS),$(.DEFAULT_GOAL))
 MAKEFLAGS	+= -Rr
 
 DOCS		 = $(wildcard $(SRC)/*.md $(SRC)/docs/*.md)
+OBJ_DEPS	 = $(OBJ)/include/version.h
 
 export KCONFIG_AUTOCONFIG := $(OBJ)/include/config/auto.conf
 export KCONFIG_AUTOHEADER := $(OBJ)/include/config.h
@@ -186,7 +186,6 @@ $(OBJ)/include/config/auto.conf: $(OBJ)/3rdparty/kconfig/conf .config
 $(OBJ)/include/config/auto.conf.cmd: $(OBJ)/include/config/auto.conf;
 
 $(OBJ)/include/version.h: $(SRC)/scripts/version.sh FORCE | $(OBJ)/include/.
-	$(M) CHK $@
 	$(Q) $< $(realpath $(SRC)) $@
 
 $(TGT)/%.bin: $(TGT)/%.elf

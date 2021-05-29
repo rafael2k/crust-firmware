@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -38,86 +38,87 @@
 #define APB2_CLK_P(x)     ((x) << 8)
 #define APB2_CLK_M(x)     ((x) << 0)
 
-static uint32_t
-sun50i_h6_ccu_fixed_get_rate(const struct ccu *self UNUSED,
-                             const struct ccu_clock *clk UNUSED,
-                             uint32_t rate UNUSED)
-{
-	return 600000000U;
-}
+static DEFINE_FIXED_RATE(ccu_get_pll_periph0_rate, 600000000U)
+
+static DEFINE_FIXED_PARENT(ccu_get_pll_ddr0, ccu, CLK_PLL_DDR0)
 
 /*
  * While APB2 has a mux, assume its parent is OSC24M. Reparenting APB2
  * to PLL_PERIPH0 in Linux for faster UART clocks is unsupported.
  */
-static const struct clock_handle sun50i_h6_ccu_apb2_parent = {
-	.dev = &r_ccu.dev,
-	.id  = CLK_OSC24M,
-};
+static DEFINE_FIXED_PARENT(ccu_get_apb2_parent, r_ccu, CLK_OSC24M)
+static DEFINE_FIXED_PARENT(ccu_get_apb2, ccu, CLK_APB2)
 
-static const struct clock_handle *
-sun50i_h6_ccu_apb2_get_parent(const struct ccu *self UNUSED,
-                              const struct ccu_clock *clk UNUSED)
-{
-	return &sun50i_h6_ccu_apb2_parent;
-}
-
-static const struct clock_handle sun50i_h6_ccu_apb2_dev_parent = {
-	.dev = &ccu.dev,
-	.id  = CLK_APB2,
-};
-
-UNUSED static const struct clock_handle *
-sun50i_h6_ccu_apb2_dev_get_parent(const struct ccu *self UNUSED,
-                                  const struct ccu_clock *clk UNUSED)
-{
-	return &sun50i_h6_ccu_apb2_dev_parent;
-}
-
-static const struct ccu_clock sun50i_h6_ccu_clocks[SUN50I_H6_CCU_CLOCKS] = {
+static const struct ccu_clock ccu_clocks[SUN50I_H6_CCU_CLOCKS] = {
+	[CLK_PLL_DDR0] = {
+		.get_parent = ccu_get_null_parent,
+		.get_rate   = ccu_get_parent_rate,
+		.reg        = 0x0010,
+		.lock       = 28,
+		.gate       = BITMAP_INDEX(0x0010, 31),
+	},
 	[CLK_PLL_PERIPH0] = {
-		.get_parent = ccu_helper_get_parent,
-		.get_rate   = sun50i_h6_ccu_fixed_get_rate,
+		.get_parent = ccu_get_null_parent,
+		.get_rate   = ccu_get_pll_periph0_rate,
 	},
 	[CLK_APB2] = {
-		.get_parent = sun50i_h6_ccu_apb2_get_parent,
-		.get_rate   = ccu_helper_get_rate,
+		.get_parent = ccu_get_apb2_parent,
+		.get_rate   = ccu_get_parent_rate,
+	},
+	[CLK_MBUS] = {
+		.get_parent = ccu_get_null_parent,
+		.get_rate   = ccu_get_parent_rate,
+		.gate       = BITMAP_INDEX(0x0540, 31),
+		.reset      = BITMAP_INDEX(0x0540, 30),
 	},
 	[CLK_BUS_MSGBOX] = {
-		.get_parent = ccu_helper_get_parent,
-		.get_rate   = ccu_helper_get_rate,
+		.get_parent = ccu_get_null_parent,
+		.get_rate   = ccu_get_parent_rate,
 		.gate       = BITMAP_INDEX(0x071c, 0),
 		.reset      = BITMAP_INDEX(0x071c, 16),
 	},
+	[CLK_DRAM] = {
+		.get_parent = ccu_get_pll_ddr0,
+		.get_rate   = ccu_get_parent_rate,
+		.reg        = 0x0800,
+		.update     = 27,
+		.reset      = BITMAP_INDEX(0x0800, 30),
+	},
+	/* Reset requires re-training DRAM, so ignore it. */
+	[CLK_BUS_DRAM] = {
+		.get_parent = ccu_get_null_parent,
+		.get_rate   = ccu_get_parent_rate,
+		.gate       = BITMAP_INDEX(0x080c, 0),
+	},
 	[CLK_BUS_PIO] = {
-		.get_parent = ccu_helper_get_parent,
-		.get_rate   = ccu_helper_get_rate,
+		.get_parent = ccu_get_null_parent,
+		.get_rate   = ccu_get_parent_rate,
 	},
 #if CONFIG(SERIAL_DEV_UART0)
 	[CLK_BUS_UART0] = {
-		.get_parent = sun50i_h6_ccu_apb2_dev_get_parent,
-		.get_rate   = ccu_helper_get_rate,
+		.get_parent = ccu_get_apb2,
+		.get_rate   = ccu_get_parent_rate,
 		.gate       = BITMAP_INDEX(0x090c, 0),
 		.reset      = BITMAP_INDEX(0x090c, 16),
 	},
 #elif CONFIG(SERIAL_DEV_UART1)
 	[CLK_BUS_UART1] = {
-		.get_parent = sun50i_h6_ccu_apb2_dev_get_parent,
-		.get_rate   = ccu_helper_get_rate,
+		.get_parent = ccu_get_apb2,
+		.get_rate   = ccu_get_parent_rate,
 		.gate       = BITMAP_INDEX(0x090c, 1),
 		.reset      = BITMAP_INDEX(0x090c, 17),
 	},
 #elif CONFIG(SERIAL_DEV_UART2)
 	[CLK_BUS_UART2] = {
-		.get_parent = sun50i_h6_ccu_apb2_dev_get_parent,
-		.get_rate   = ccu_helper_get_rate,
+		.get_parent = ccu_get_apb2,
+		.get_rate   = ccu_get_parent_rate,
 		.gate       = BITMAP_INDEX(0x090c, 2),
 		.reset      = BITMAP_INDEX(0x090c, 18),
 	},
 #elif CONFIG(SERIAL_DEV_UART3)
 	[CLK_BUS_UART3] = {
-		.get_parent = sun50i_h6_ccu_apb2_dev_get_parent,
-		.get_rate   = ccu_helper_get_rate,
+		.get_parent = ccu_get_apb2,
+		.get_rate   = ccu_get_parent_rate,
 		.gate       = BITMAP_INDEX(0x090c, 3),
 		.reset      = BITMAP_INDEX(0x090c, 19),
 	},
@@ -130,19 +131,13 @@ const struct ccu ccu = {
 		.drv   = &ccu_driver.drv,
 		.state = CLOCK_DEVICE_STATE_INIT(SUN50I_H6_CCU_CLOCKS),
 	},
-	.clocks = sun50i_h6_ccu_clocks,
+	.clocks = ccu_clocks,
 	.regs   = DEV_CCU,
 };
 
 void
 ccu_suspend(void)
 {
-	/* Set CPUX to LOSC (32kHz), APB to CPUX/4, AXI to CPUX/3. */
-	mmio_write_32(DEV_CCU + CPUX_AXI_CFG_REG,
-	              CPUX_CLK_SRC(1) |
-	              CPUX_APB_CLK_M(3) |
-	              CPUX_AXI_CLK_M(2));
-
 	/* Set PSI/AHB1/AHB2 to LOSC/1 (32kHz). */
 	mmio_write_32(DEV_CCU + PSI_CFG_REG,
 	              PSI_CLK_SRC(1) |
@@ -163,14 +158,18 @@ ccu_suspend(void)
 }
 
 void
-ccu_resume(void)
+ccu_suspend_cluster(uint32_t cluster UNUSED)
 {
-	/* Set CPUX to PLL_CPUX, APB to CPUX/4, AXI to CPUX/3. */
+	/* Set CPUX to LOSC (32kHz), APB to CPUX/4, AXI to CPUX/3. */
 	mmio_write_32(DEV_CCU + CPUX_AXI_CFG_REG,
-	              CPUX_CLK_SRC(3) |
+	              CPUX_CLK_SRC(1) |
 	              CPUX_APB_CLK_M(3) |
 	              CPUX_AXI_CLK_M(2));
+}
 
+void
+ccu_resume(void)
+{
 	/* Set PSI/AHB1/AHB2 to PLL_PERIPH0/3 (200MHz). */
 	mmio_write_32(DEV_CCU + PSI_CFG_REG,
 	              PSI_CLK_SRC(3) |
@@ -191,6 +190,16 @@ ccu_resume(void)
 }
 
 void
+ccu_resume_cluster(uint32_t cluster UNUSED)
+{
+	/* Set CPUX to PLL_CPUX, APB to CPUX/4, AXI to CPUX/3. */
+	mmio_write_32(DEV_CCU + CPUX_AXI_CFG_REG,
+	              CPUX_CLK_SRC(3) |
+	              CPUX_APB_CLK_M(3) |
+	              CPUX_AXI_CLK_M(2));
+}
+
+void
 ccu_init(void)
 {
 	/* Set APB2 to OSC24M/1 (24MHz). */
@@ -200,4 +209,5 @@ ccu_init(void)
 	              APB2_CLK_M(0));
 
 	ccu_resume();
+	ccu_resume_cluster(0);
 }

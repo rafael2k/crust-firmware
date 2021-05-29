@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 The Crust Firmware Authors.
+ * Copyright © 2020-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -9,13 +9,23 @@
 #include <regulator.h>
 
 /**
- * The list of regulators to disable while the system is inactive (suspended).
+ * The regulator supplying VDD-CPUX.
  */
-extern const struct regulator_list inactive_list;
+extern const struct regulator_handle cpu_supply;
 
 /**
- * The list of regulators to disable while system power is off.
+ * The regulator supplying VCC-DRAM.
  */
-extern const struct regulator_list off_list;
+extern const struct regulator_handle dram_supply;
+
+/**
+ * The regulator supplying VCC-PLL.
+ */
+extern const struct regulator_handle vcc_pll_supply;
+
+/**
+ * The regulator supplying VDD-SYS.
+ */
+extern const struct regulator_handle vdd_sys_supply;
 
 #endif /* COMMON_REGULATOR_LIST_H */

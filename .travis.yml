@@ -33,14 +33,21 @@ matrix:
             - libc6-dev-arm64-cross
       env:
         - CONFIGS="allnoconfig allyesconfig defconfig
+                   bananapi_m2_plus_h3_defconfig
+                   beelink_x2_defconfig
+                   libretech_all_h3_cc_h3_defconfig
+                   libretech_all_h3_cc_h5_defconfig
                    orangepi_3_defconfig
+                   orangepi_one_defconfig
                    orangepi_pc2_defconfig
+                   orangepi_plus2e_defconfig
                    orangepi_win_defconfig
                    orangepi_zero_plus_defconfig
                    pine64_plus_defconfig
                    pine_h64_defconfig
                    pinebook_defconfig
                    pinephone_defconfig
+                   tanix_tx6_defconfig
                    tbs_a711_defconfig
                    randconfig randconfig randconfig"
         - GCC_VER=9.1.1-20190507

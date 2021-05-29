@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -12,7 +12,7 @@
 
 struct regmap {
 	const struct device *dev;
-	uint8_t              id;
+	uint32_t             id;
 };
 
 struct regmap_device {

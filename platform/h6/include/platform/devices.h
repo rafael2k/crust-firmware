@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -22,6 +22,8 @@
 #define DEV_SPINLOCK  0x03004000
 #define DEV_HSTIMER   0x03005000
 #define DEV_SID       0x03006000
+#define DEV_TZASC     0x03007000
+#define DEV_SPC       0x03008000
 #define DEV_TIMER     0x03009000
 #define DEV_PWM       0x0300a000
 #define DEV_PIO       0x0300b000
@@ -31,7 +33,9 @@
 #define DEV_GICD      0x03021000
 #define DEV_GICC      0x03022000
 #define DEV_IOMMU     0x030f0000
-#define DEV_DRAMCTL   0x04002000
+#define DEV_DRAMCOM   0x04002000
+#define DEV_DRAMCTL   0x04003000
+#define DEV_DRAMPHY   0x04005000
 #define DEV_NAND      0x04011000
 #define DEV_MMC0      0x04020000
 #define DEV_MMC1      0x04021000
@@ -81,6 +85,7 @@
 #define DEV_R_W1      0x07040400
 #define DEV_R_UART    0x07080000
 #define DEV_R_I2C     0x07081400
+#define DEV_R_RSB     0x07083000
 #define DEV_CPUSYSCFG 0x08100000
 #define DEV_CNT_R     0x08110000
 #define DEV_CNT_C     0x08120000

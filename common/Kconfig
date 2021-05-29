@@ -1,24 +1,28 @@
 #
-# Copyright © 2017-2020 The Crust Firmware Authors.
+# Copyright © 2017-2021 The Crust Firmware Authors.
 # SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
 #
 
 menu "Firmware features"
 
-config NEED_OSC24M
-	bool
+config PMIC_SHUTDOWN
+	bool "Use PMIC for full hardware shutdown"
+	depends on PMIC
+	default y
 	help
-		Select this option to prevent the firmware from turning
-		off the external OSC24M crystal.
+		Command the PMIC to turn off all outputs during the
+		shutdown procedure. This reduces power usage to almost
+		zero, but also stops the firmware. In this state, only a
+		power button connected directly to the PMIC can turn the
+		system back on.
 
-config SUSPEND_OSC24M
-	bool "Disable OSC24M during suspend" if !NEED_OSC24M
-	default !NEED_OSC24M
-	help
-		If this option is enabled, the external OSC24M crystal
-		will be turned off while the system is suspended/off.
+		If this option is disabled, the shutdown procedure will
+		be implemented in software only (similar to the suspend
+		procedure), so the firmware can turn the system back on.
 
-		If possible, enable this option to reduce power usage.
+		Say Y if your board is powered by a battery, or N if you
+		need some other method of turning on the system, such as
+		an IR remote control or a GPIO input.
 
 endmenu
 

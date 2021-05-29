@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -91,7 +91,7 @@
 #define DEV_R_PRCM      0x01f01400
 #define DEV_R_TWD       0x01f01800
 #define DEV_R_CPUCFG    0x01f01c00
-#define DEV_R_CIR       0x01f02000
+#define DEV_R_CIR_RX    0x01f02000
 #define DEV_R_I2C       0x01f02400
 #define DEV_R_UART      0x01f02800
 #define DEV_R_PIO       0x01f02c00

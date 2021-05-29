@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -19,6 +19,17 @@ struct clock_handle {
 	const struct device *dev; /**< The clock controller device. */
 	uint8_t              id;  /**< The device-specific clock identifier. */
 };
+
+/**
+ * Determine if a clock is active.
+ *
+ * A clock is active if it has any outstanding references. The state of the
+ * hardware gate, if any, is not considered.
+ *
+ * @param clock A reference to a clock.
+ * @return      The state of the clock.
+ */
+bool clock_active(const struct clock_handle *clock);
 
 /**
  * Disable a clock.
@@ -46,13 +57,9 @@ void clock_enable(const struct clock_handle *clock);
  * If the clock does not have a gate, this may have no effect on the hardware.
  * The clock's parent, if any, will also be enabled.
  *
- * This function may fail with:
- *   EIO    There was a problem communicating with the hardware.
- *
  * @param clock A handle specifying the clock.
- * @return      A reference to the clock that was acquired.
  */
-int clock_get(const struct clock_handle *clock);
+void clock_get(const struct clock_handle *clock);
 
 /**
  * Get the current rate of a clock, as calculated from the hardware.
@@ -61,15 +68,12 @@ int clock_get(const struct clock_handle *clock);
  * regardless of if the clock is currently gated.
  *
  * @param clock A reference to a clock.
- * @return      The clock frequency in Hz on success; zero on failure.
+ * @return      The clock frequency in Hz.
  */
 uint32_t clock_get_rate(const struct clock_handle *clock);
 
 /**
  * Get the current state of a clock, as determined from the hardware.
- *
- * This function may fail with:
- *   EIO    There was a problem communicating with the hardware.
  *
  * @param clock A reference to a clock.
  * @return      One of the enumerated clock states.

@@ -1,5 +1,5 @@
 #
-# Copyright © 2017-2020 The Crust Firmware Authors.
+# Copyright © 2017-2021 The Crust Firmware Authors.
 # SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
 #
 
@@ -13,6 +13,7 @@ config HAVE_I2C
 choice
 	bool "I2C controller pin selection"
 	depends on HAVE_I2C
+	default I2C_PINS_PL0_PL1 if PLATFORM_H6 # For Linux compatibility
 	default I2C_PINS_NONE if HAVE_RSB
 	default I2C_PINS_PL0_PL1
 	help
@@ -32,7 +33,7 @@ config I2C_PINS_PL0_PL1
 		Select this option if your board has a PMIC or regulator
 		connected via I2C using the normal set of pins.
 
-		Note that if you SoC contains an RSB controller,
+		Note that if your SoC contains an RSB controller,
 		choosing this option will prevent you from using it.
 
 config I2C_PINS_PL8_PL9
@@ -47,7 +48,7 @@ endchoice
 config I2C_PIN_MODE_PL0_PL1
 	int
 	depends on I2C_PINS_PL0_PL1
-	default 3 if HAVE_RSB || PLATFORM_H6
+	default 3 if HAVE_RSB
 	default 2
 	help
 		Provide the pin mode that configures PL0/PL1 as I2C SCL/SDA.
@@ -61,7 +62,6 @@ config I2C
 
 config HAVE_RSB
 	bool
-	default SOC_A64 || PLATFORM_A83T
 	help
 		This option is selected on platforms that have RSB
 		controller hardware.

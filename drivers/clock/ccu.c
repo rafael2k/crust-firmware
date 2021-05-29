@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -19,6 +19,13 @@ to_ccu(const struct device *dev)
 	return container_of(dev, const struct ccu, dev);
 }
 
+const struct clock_handle *
+ccu_get_null_parent(const struct ccu *self UNUSED,
+                    const struct ccu_clock *clk UNUSED)
+{
+	return NULL;
+}
+
 static const struct clock_handle *
 ccu_get_parent(const struct clock_handle *clock)
 {
@@ -26,6 +33,13 @@ ccu_get_parent(const struct clock_handle *clock)
 	const struct ccu_clock *clk = &self->clocks[clock->id];
 
 	return clk->get_parent(self, clk);
+}
+
+uint32_t
+ccu_get_parent_rate(const struct ccu *self UNUSED,
+                    const struct ccu_clock *clk UNUSED, uint32_t rate)
+{
+	return rate;
 }
 
 static uint32_t
@@ -69,15 +83,12 @@ ccu_set_state(const struct clock_handle *clock, uint32_t state)
 	if (ccu_get_state(clock) == state)
 		return;
 
-	/* Ungate the clock before taking the device out of reset. */
-	if (clk->gate && ungate)
-		bitmap_set(regs, clk->gate);
-	/* Assert or deassert the reset line while the clock is running. */
+	/* First, (de)assert the reset line. */
 	if (clk->reset)
 		(enable ? bitmap_set : bitmap_clear)(regs, clk->reset);
-	/* Gate the clock after putting the device in reset. */
-	if (clk->gate && !ungate)
-		bitmap_clear(regs, clk->gate);
+	/* Once the device is in/out of reset, (un)gate the clock. */
+	if (clk->gate)
+		(ungate ? bitmap_set : bitmap_clear)(regs, clk->gate);
 	/* Apply the changes by setting the update bit, if applicable. */
 	if (clk->update)
 		mmio_set_32(regs + clk->reg, BIT(clk->update));

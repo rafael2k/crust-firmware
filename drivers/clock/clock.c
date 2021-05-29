@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2020 The Crust Firmware Authors.
+ * Copyright © 2017-2021 The Crust Firmware Authors.
  * SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
  */
 
@@ -36,11 +36,17 @@ clock_state_for(const struct clock_handle *clock)
 	return &state->cs[clock->id];
 }
 
+bool
+clock_active(const struct clock_handle *clock)
+{
+	return clock_state_for(clock)->refcount;
+}
+
 void
 clock_disable(const struct clock_handle *clock)
 {
 	/* Calling this function is only allowed after calling clock_get(). */
-	assert(clock_state_for(clock)->refcount);
+	assert(clock_active(clock));
 
 	clock_ops_for(clock)->set_state(clock, CLOCK_STATE_GATED);
 }
@@ -52,7 +58,7 @@ clock_enable(const struct clock_handle *clock)
 	const struct clock_handle *parent;
 
 	/* Calling this function is only allowed after calling clock_get(). */
-	assert(clock_state_for(clock)->refcount);
+	assert(clock_active(clock));
 
 	/* If the clock has a parent, ensure the parent is enabled. */
 	if ((parent = ops->get_parent(clock)))
@@ -61,26 +67,24 @@ clock_enable(const struct clock_handle *clock)
 	ops->set_state(clock, CLOCK_STATE_ENABLED);
 }
 
-int
+void
 clock_get(const struct clock_handle *clock)
 {
 	const struct clock_driver_ops *ops = clock_ops_for(clock);
-	const struct clock_handle *parent;
 	struct clock_state *state = clock_state_for(clock);
-	int err;
 
 	/* Perform additional setup if this is the first reference. */
 	if (!state->refcount) {
+		const struct clock_handle *parent;
+		int err UNUSED;
+
 		/* Ensure the controller's driver is loaded. */
-		if ((err = device_get(clock->dev)))
-			return err;
+		err = device_get(clock->dev);
+		assert(err == SUCCESS);
 
 		/* Ensure the clock's parent has an active reference. */
-		if ((parent = ops->get_parent(clock)) &&
-		    (err = clock_get(parent))) {
-			device_put(clock->dev);
-			return err;
-		}
+		if ((parent = ops->get_parent(clock)))
+			clock_get(parent);
 
 		debug("%s: Clock %u running at %u Hz", clock->dev->name,
 		      clock->id, clock_get_rate(clock));
@@ -91,8 +95,6 @@ clock_get(const struct clock_handle *clock)
 
 	/* Enable the clock. */
 	clock_enable(clock);
-
-	return SUCCESS;
 }
 
 uint32_t

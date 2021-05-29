@@ -1,5 +1,5 @@
 #
-# Copyright © 2017-2020 The Crust Firmware Authors.
+# Copyright © 2017-2021 The Crust Firmware Authors.
 # SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
 #
 
@@ -57,15 +57,13 @@ config DEBUG_LOG
 		informational messages that may aid in debugging.
 
 config DEBUG_MONITOR
-	bool "Provide an interactive debug monitor while off/suspended"
+	bool "Provide an interactive debug monitor while off/asleep"
 	help
-		While the system is inactive, accept simple commands on
-		the serial port. Parsing is extremely basic, and line
+		While the system is off or asleep, accept simple commands
+		on the serial port. Parsing is extremely basic, and line
 		editing is not supported. Available commands are:
 			m <address> [value] -- read/write memory
-			sb -- trigger board-level reboot
-			sr -- trigger SoC-level reset
-			sw -- trigger wakeup
+			w -- trigger wakeup
 
 		With a PMIC present, additional commands are supported:
 			p <address> [value] -- read/write PMIC registers
@@ -76,10 +74,10 @@ config DEBUG_MONITOR_PMIC
 	default MFD_AXP20X
 
 config DEBUG_PRINT_BATTERY
-	bool "Print battery consumption periodically while off/suspended"
+	bool "Print battery consumption periodically while off/asleep"
 	depends on MFD_AXP803
 	help
-		While the system is inactive and the battery is
+		While the system is off or asleep and the battery is
 		discharging, print the battery voltage, discharge
 		current, and calculated power usage every 30 seconds.
 
@@ -89,7 +87,7 @@ config DEBUG_PRINT_LATENCY
 		After each system state transition, calculate the
 		average latency of the main loop, in AR100 clock cycles.
 		The latency will be printed after the firmware has
-		performed 1 million iterations in that state.
+		performed 10000 iterations in that state.
 
 config DEBUG_PRINT_SPRS
 	bool "Print the contents of Special Purpose Registers at boot"
@@ -98,5 +96,26 @@ config DEBUG_PRINT_SPRS
 		Purpose Registers, or SPRs, that describe the particular
 		CPU implementation. Enable this option to print a subset
 		of these SPRs in a human-readable format during boot.
+
+config DEBUG_RECORD_STEPS
+	bool "Record steps of the suspend/resume process in the RTC"
+	help
+		Record the start of various steps of the suspend and
+		resume processes in one of the RTC's general purpose
+		registers. This provides an approximation of what the
+		firmware was doing at the time of a hang. The last step
+		will remain available in the RTC until a clean shutdown
+		or reboot, or until power is removed.
+
+config DEBUG_VERIFY_DRAM
+	bool "Verify DRAM contents after controller resume"
+	help
+		After reinitializing the DRAM controller during system
+		resume, verify that DRAM contents were preserved via a
+		simple checksum.
+
+		The algorithm is very simplistic, and only a small
+		portion of DRAM is checked, so there is no guarantee
+		that corruption will be detected.
 
 endmenu
