@@ -1,11 +1,23 @@
 crust-firmware (0.4-1) experimental; urgency=medium
 
-  * New upstream release.
+  [ upstream ]
+  * new release
 
-  [ Arnaud Ferraris <arnaud.ferraris@collabora.com> ]
-  * Enable PineTab, 0001-configs-add-PineTab.patch.
+  [ Arnaud Ferraris ]
+  * add patch 0001 to support PineTab
 
- -- Nicolas Boulenguez <nicolas@debian.org>  Sat, 29 May 2021 11:15:10 +0000
+  [ Nicolas Boulenguez ]
+  * update metadata for patch 0001
+
+  [ Jonas Smedegaard ]
+  * fix exclude upstream git-ignore hints from source git
+  * copyright info:
+    + add Licence-Grant fields
+    + use Licence-Reference field;
+      override lintian (see bug#786450)
+    + add source helper script copyright-check
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 05 Jun 2021 13:38:18 +0200
 
 crust-firmware (0.3-2) experimental; urgency=medium
 
