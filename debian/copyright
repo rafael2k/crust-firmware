@@ -41,6 +41,19 @@ License-Grant:
  SPDX-License-Identifier: MIT
 License: Expat
 
+Files: debian/copyright-check
+Copyright:
+  2020-2021, Jonas Smedegaard <dr@jones.dk>
+  2020-2021, Purism, SPC
+License-Grant:
+ This program is free software;
+ you can redistribute it and/or modify it
+ under the terms of the GNU General Public License
+ as published by the Free Software Foundation;
+ either version 3,
+ or (at your option) any later version.
+License: GPL-3+
+
 License: BSD-1-clause
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following condition is
@@ -112,3 +125,6 @@ License: Expat
 
 License: GPL-2
 License-Reference: /usr/share/common-licenses/GPL-2
+
+License: GPL-3+
+License-Reference: /usr/share/common-licenses/GPL-3
