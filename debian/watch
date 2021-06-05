@@ -1,4 +1,6 @@
 version=4
+# check: uscan --report
+# update: gbp import-orig --upstream-vcs-tag=vX.Y.Z --uscan
 
 opts=filenamemangle=s/.+\/v?(\d\S+)\.tar\.gz/crust-$1\.tar\.gz/ \
   https://github.com/crust-firmware/crust/tags .*/v?(\d\S+)\.tar\.gz
