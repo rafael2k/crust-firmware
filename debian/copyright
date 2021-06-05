@@ -111,5 +111,4 @@ License: Expat
  SOFTWARE.
 
 License: GPL-2
- On Debian system, the full text of this license may be found in
- `/usr/share/common-licenses/GPL-2`.
+License-Reference: /usr/share/common-licenses/GPL-2
