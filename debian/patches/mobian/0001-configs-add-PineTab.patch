@@ -2,6 +2,7 @@ From 634e1fc8a6385f357f09ba5463f14b0956726c20 Mon Sep 17 00:00:00 2001
 From: Arnaud Ferraris <arnaud.ferraris@collabora.com>
 Date: Thu, 27 May 2021 15:55:11 +0200
 Subject: [PATCH] configs: add PineTab
+Applied-Upstream: https://github.com/crust-firmware/crust/commit/697776c49b922f63922c9ea9414e7ddd5d0ac3d4
 
 ---
  configs/pinetab_defconfig | 2 ++
