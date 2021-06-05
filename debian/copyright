@@ -7,6 +7,8 @@ Copyright: 2020-2021 Nicolas Boulenguez <nicolas@debian.org>
            2017-2021 The Crust Firmware Authors
            2014-2017 ARM Limited and Contributors
            2005-2014 Rich Felker, et al.
+License-Grant:
+ SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
 License: BSD-3-clause or GPL-2
 
 Files: 3rdparty/kconfig/*
@@ -15,20 +17,28 @@ Copyright: 2017-2021 The Crust Firmware Authors
            2018      Masahiro Yamada <yamada.masahiro@socionext.com>
            2002-2005 Roman Zippel <zippel@linux-m68k.org>
            2002-2005 Sam Ravnborg <sam@ravnborg.org>
+License-Grant:
+ SPDX-License-Identifier: GPL-2.0
 License: GPL-2
 
 Files: arch/or1k/include/asm/spr.h
 Copyright: 2014 OpenRISC Project Maintainers
+License-Grant:
+ SPDX-License-Identifier: BSD-1-Clause
 License: BSD-1-clause
 
 Files: include/lib/macros.S
 Copyright: 2013-2017, ARM Limited and Contributors
            2017-2021 The Crust Firmware Authors
+License-Grant:
+ SPDX-License-Identifier: BSD-3-Clause
 License: BSD-3-clause
 
 Files: include/stdlib/ctype.h
 Copyright: 2005-2014 Rich Felker, et al.
            2017-2021 The Crust Firmware Authors
+License-Grant:
+ SPDX-License-Identifier: MIT
 License: Expat
 
 License: BSD-1-clause
