@@ -5,7 +5,7 @@ Maintainer: Nicolas Boulenguez <nicolas@debian.org>
 Uploaders:
  Jonas Smedegaard <dr@jones.dk>,
  Arnaud Ferraris <arnaud.ferraris@gmail.com>,
-Standards-Version: 4.5.1
+Standards-Version: 4.6.0
 Build-Depends:
  bison,
  debhelper-compat (= 13),
