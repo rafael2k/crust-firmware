@@ -73,14 +73,15 @@ RE_kconfig=$(_file_regex --grantglob '3rdparty/kconfig/*' *)
 # TODO: strip files matching glob in current (only, no later) section
 _licensecheck() {
 	SKIPFILES=$SKIPFILES perl -MGetopt::Long=:config,gnu_getopt -MIPC::System::Simple=capture -MList::Util=uniq \
-		-e 'GetOptions ( \%opt, "check=s", "ignore=s", "shortname=s", "subset=s" );'\
+		-e 'GetOptions ( \%opt, "check=s", "ignore=s", "shortname=s", "subset=s", "merge-licenses" );'\
 		-e '@subset = split( " ", $opt{subset} );' \
 		-e '$subset_globs = join "\n ", @subset;' \
-		-E 'if ( $GLOB =~ /^[*]$/ ) { say STDERR "check default section(s) ..." }' \
-		-E 'elsif (!@subset) { say STDERR "check remaining upstream section(s) ..." }' \
-		-E 'elsif ( $opt{shortname} ) { say STDERR "check $opt{shortname} section(s) @subset ..." }' \
-		-E 'else { say STDERR "check section(s) @subset ..." };' \
-		-e '@cmd = ( qw(licensecheck --copyright --deb-machine --recursive --lines 0), "--check", $opt{check}, "--ignore", $opt{ignore}, "--" );'\
+		-E 'if ( $subset_globs =~ /^[*]$/ ) { say STDERR "check default section(s) ..." }' \
+		-E 'elsif ( @subset and $opt{shortname} ) { say STDERR "check $opt{shortname} section(s) @subset ..." }' \
+		-E 'elsif (@subset) { say STDERR "check section(s) @subset ..." }' \
+		-E 'elsif ($opt{shortname} ) { say STDERR "check $opt{shortname} section(s) @subset ..." }' \
+		-E 'else { say STDERR "check remaining upstream section(s) ..." };' \
+		-e '@cmd = ( qw(licensecheck --copyright --deb-machine --recursive --lines 0), "--check", $opt{check}, "--ignore", $opt{ignore}, $opt{"merge-licenses"} ? "--merge-licenses" : (), "--" );'\
 		-E 'say STDERR "@cmd *" if $ENV{DEBUG};'\
 		-e '$_ = $dump = capture( @cmd, glob "*" );'\
 		-e 'if ( !$ENV{NOGLOBMERGE} and grep /[*]/, @subset ) { s/^.*?\n\nFiles: \K.*?(?=\n\w)/$subset_globs/s }' \
@@ -100,7 +101,7 @@ rm -f debian/copyright_hints
 
 # initially, check all to know roughly what to group and in which order
 #rm -f debian/copyright_hints
-#_licensecheck '' --check '.*' --ignore "^($RE_SKIP|debian/.*)$"
+#_licensecheck --check '.*' --ignore "^($RE_SKIP|debian/.*)$"
 #exit 0
 
 # check default licensed files first
