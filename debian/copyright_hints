@@ -12,7 +12,7 @@ Copyright
   2020, The Crust Firmware Authors.
   2020-2021, The Crust Firmware Authors.
   2021, The Crust Firmware Authors.
-License: BSD-3-clause or GPL-2
+License: BSD-3-clause and/or BSD-3-clause or GPL-2
  FIXME
 
 Files
@@ -23,7 +23,7 @@ Files
 Copyright
   2005-2014, Rich Felker, et al.
   2017-2021, The Crust Firmware Authors.
-License: BSD-3-clause or GPL-2
+License: BSD-3-clause and/or BSD-3-clause or GPL-2
  FIXME
 
 Files
@@ -31,7 +31,7 @@ Files
 Copyright
   2014-2017, ARM Limited and Contributors.
   2017-2021, The Crust Firmware Authors.
-License: BSD-3-clause or GPL-2
+License: BSD-3-clause and/or BSD-3-clause or GPL-2
  FIXME
 
 Files
@@ -94,11 +94,19 @@ Files
  Doxyfile
  README.md
  docs/abi.md
+ docs/code_of_conduct.md
  docs/issue_template.md
  docs/pull_request_template.md
 Copyright
   NONE
 License: UNKNOWN
+ FIXME
+
+Files
+ arch/or1k/include/asm/spr.h
+Copyright
+  2014, OpenRISC Project Maintainers.
+License: BSD-1-Clause
  FIXME
 
 Files
@@ -109,14 +117,7 @@ Copyright
   2013-2017, ARM Limited and Contributors.
   2014, OpenRISC Project Maintainers.
   2017-2021, The Crust Firmware Authors.
-  <year> <name of author>
-  disclaimer" for the program, if necessary. Here is
-  ed by the Free Software
-  ed interfaces, the original
-  interest in the program
-  the software, and (2)
-  year name of author
-License: BSD-3-clause and/or Expat and/or GPL-2
+License: BSD-1-Clause and/or BSD-3-clause and/or Expat and/or GPL-2
  FIXME
 
 Files
@@ -124,14 +125,7 @@ Files
 Copyright
   2013-2017, ARM Limited and Contributors.
   2017-2021, The Crust Firmware Authors.
-License: UNKNOWN
- FIXME
-
-Files
- arch/or1k/include/asm/spr.h
-Copyright
-  2014, OpenRISC Project Maintainers.
-License: UNKNOWN
+License: BSD-3-clause
  FIXME
 
 Files
@@ -139,14 +133,7 @@ Files
 Copyright
   2005-2014, Rich Felker, et al.
   2017-2021, The Crust Firmware Authors.
-License: UNKNOWN
- FIXME
-
-Files
- docs/code_of_conduct.md
-Copyright
-  lie Linux Code of Conduct][alcoc], which
-License: UNKNOWN
+License: Expat
  FIXME
 
 Files
@@ -159,13 +146,10 @@ License: UNKNOWN
 Files
  debian/copyright-check
 Copyright
-  --deb-machine --recursive --lines 0), "--check", $opt{check}, "--ignore", $opt{ignore}, "--" );'
-  -protected Debian files
   2020-2021, Jonas Smedegaard <dr@jones.dk>
   2020-2021, Purism, SPC
   K / /mg;'
   protected nor stating copyright or licensing
-  years for each copyright holder
 License: GPL-3+
  FIXME
 

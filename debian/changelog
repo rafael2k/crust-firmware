@@ -1,3 +1,12 @@
+crust-firmware (0.4-2) unstable; urgency=medium
+
+  [ Jonas Smedegaard ]
+  * watch file: add usage comment
+  * declare compliance with Debian Policy 4.6.0
+  * improve source helper script copyright-check
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 06 Sep 2021 21:25:26 +0200
+
 crust-firmware (0.4-1) experimental; urgency=medium
 
   [ upstream ]
