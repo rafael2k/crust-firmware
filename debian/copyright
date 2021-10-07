@@ -54,6 +54,7 @@ License-Grant:
  either version 3,
  or (at your option) any later version.
 License: GPL-3+
+Reference: debian/copyright
 
 License: BSD-1-clause
  Redistribution and use in source and binary forms, with or without
@@ -125,7 +126,7 @@ License: Expat
  SOFTWARE.
 
 License: GPL-2
-License-Reference: /usr/share/common-licenses/GPL-2
+Reference: /usr/share/common-licenses/GPL-2
 
 License: GPL-3+
-License-Reference: /usr/share/common-licenses/GPL-3
+Reference: /usr/share/common-licenses/GPL-3
