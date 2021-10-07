@@ -1,3 +1,18 @@
+crust-firmware (0.4-3) unstable; urgency=medium
+
+  [ Nicolas Boulenguez ]
+  * update copyright info: update lintian overrides
+
+  [ Jonas Smedegaard ]
+  * drop patch 0001,
+    and instead reuse identically compiled pinebook binary
+  * reuse pinebook binary for teres_i
+  * update copyright info:
+    + add preferred upstream contact
+  * update copyright info: use Reference field (not License-Reference)
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 07 Oct 2021 22:43:08 +0200
+
 crust-firmware (0.4-2) unstable; urgency=medium
 
   [ Jonas Smedegaard ]
