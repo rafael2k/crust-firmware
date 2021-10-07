@@ -2,8 +2,11 @@
 
 verbose := $(if $(filter terse,$(DEB_BUILD_OPTIONS)),,V=1)
 
+LINKED_PLATFORM_SOURCES = pinebook
+
 # Arnaud Ferraris <arnaud.ferraris@gmail.com>
-platforms += pinephone pinetab
+platforms += pinephone
+platforms_like_pinebook += pinetab
 
 # Vagrant Cascadian <vagrant@debian.org>
 platforms += pinebook pine64_plus
@@ -19,3 +22,8 @@ $(platforms):
   # Move to the parent directory for easyer installation.
   # Rename the binary file after the platform.
 	install -m644 build/$@/scp.bin build/$@.bin
+
+override_dh_link:
+	dh_link -- $(foreach source,$(LINKED_PLATFORM_SOURCES),\
+		$(foreach target,$(platforms_like_$(source)),\
+			usr/lib/crust-firmware/$(source).bin usr/lib/crust-firmware/$(target).bin))
