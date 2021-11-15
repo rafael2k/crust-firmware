@@ -2,25 +2,30 @@
 
 verbose := $(if $(filter terse,$(DEB_BUILD_OPTIONS)),,V=1)
 
-LINKED_PLATFORM_SOURCES = pinebook
+platforms = $(foreach p, a64 a64_axp20x a64_axp20x_cec,\
+ generic_$p generic_$p_no-serial)
 
 # Vagrant Cascadian <vagrant@debian.org>
-platforms += pine64_plus
+platforms_like_generic_a64_axp20x += pine64_plus
 
 # Vagrant Cascadian <vagrant@debian.org>
-platforms += pinebook
+platforms_like_generic_a64_axp20x_no-serial += pinebook
 
 # Arnaud Ferraris <arnaud.ferraris@gmail.com>
-platforms += pinephone
+platforms_like_generic_a64_axp20x_no-serial += pinephone
 
 # Arnaud Ferraris <arnaud.ferraris@gmail.com>
-platforms_like_pinebook += pinetab
+platforms_like_generic_a64_axp20x_no-serial += pinetab
 
 # Jonas Smedegaard <dr@jones.dk>
-platforms_like_pinebook += teres_i
+platforms_like_generic_a64_axp20x_no-serial += teres_i
 
 %:
 	dh $@
+
+# create most generic config, not possible to contain in patch
+execute_before_dh_auto_build:
+	touch configs/generic_a64_defconfig
 
 override_dh_auto_build: $(platforms)
 $(platforms):
@@ -32,6 +37,6 @@ $(platforms):
 	install -m644 build/$@/scp.bin build/$@.bin
 
 override_dh_link:
-	dh_link -- $(foreach source,$(LINKED_PLATFORM_SOURCES),\
+	dh_link -- $(foreach source,$(platforms),\
 		$(foreach target,$(platforms_like_$(source)),\
 			usr/lib/crust-firmware/$(source).bin usr/lib/crust-firmware/$(target).bin))
