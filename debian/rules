@@ -5,6 +5,17 @@ verbose := $(if $(filter terse,$(DEB_BUILD_OPTIONS)),,V=1)
 platforms = $(foreach p, a64 a64_axp20x a64_axp20x_cec,\
  generic_$p generic_$p_no-serial)
 
+# Jonas Smedegaard <dr@jones.dk>
+# maybe Rodrigo Exterckötter Tjäder <rodrigo@tjader.xyz>
+platforms_like_generic_a64_axp20x_cec += a64-olinuxino
+
+# Jonas Smedegaard <dr@jones.dk>
+# maybe Philip Rinn <rinni@inventati.org>
+platforms_like_generic_a64_axp20x_cec += a64-olinuxino-emmc
+
+# Sunil Mohan Adapa <sunil@medhas.org>
+platforms_like_generic_a64_axp20x += pine64-lts
+
 # Vagrant Cascadian <vagrant@debian.org>
 platforms_like_generic_a64_axp20x += pine64_plus
 
@@ -12,6 +23,8 @@ platforms_like_generic_a64_axp20x += pine64_plus
 platforms_like_generic_a64_axp20x_no-serial += pinebook
 
 # Arnaud Ferraris <arnaud.ferraris@gmail.com>
+# maybe Arnaud Ferraris <arnaud.ferraris@collabora.com> (1.1, 1.2)
+# maybe Benoit Delcour <benoit.delcour@gmail.com> (1.2)
 platforms_like_generic_a64_axp20x_no-serial += pinephone
 
 # Arnaud Ferraris <arnaud.ferraris@gmail.com>
