@@ -4,15 +4,20 @@ verbose := $(if $(filter terse,$(DEB_BUILD_OPTIONS)),,V=1)
 
 LINKED_PLATFORM_SOURCES = pinebook
 
+# Vagrant Cascadian <vagrant@debian.org>
+platforms += pine64_plus
+
+# Vagrant Cascadian <vagrant@debian.org>
+platforms += pinebook
+
 # Arnaud Ferraris <arnaud.ferraris@gmail.com>
 platforms += pinephone
+
+# Arnaud Ferraris <arnaud.ferraris@gmail.com>
 platforms_like_pinebook += pinetab
 
 # Jonas Smedegaard <dr@jones.dk>
 platforms_like_pinebook += teres_i
-
-# Vagrant Cascadian <vagrant@debian.org>
-platforms += pinebook pine64_plus
 
 %:
 	dh $@
