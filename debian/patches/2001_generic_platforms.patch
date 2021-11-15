@@ -1,0 +1,29 @@
+Description: add configs for generic platforms
+Author: Jonas Smedegaard <dr@jones.dk>
+Last-Update: 2021-11-15
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- /dev/null
++++ b/configs/generic_a64_axp20x_cec_defconfig
+@@ -0,0 +1,2 @@
++CONFIG_MFD_AXP20X=y
++CONFIG_CEC=y
+--- /dev/null
++++ b/configs/generic_a64_axp20x_cec_no-serial_defconfig
+@@ -0,0 +1,3 @@
++CONFIG_MFD_AXP20X=y
++CONFIG_CEC=y
++# CONFIG_SERIAL is not set
+--- /dev/null
++++ b/configs/generic_a64_axp20x_defconfig
+@@ -0,0 +1 @@
++CONFIG_MFD_AXP20X=y
+--- /dev/null
++++ b/configs/generic_a64_axp20x_no-serial_defconfig
+@@ -0,0 +1,2 @@
++CONFIG_MFD_AXP20X=y
++# CONFIG_SERIAL is not set
+--- /dev/null
++++ b/configs/generic_a64_no-serial_defconfig
+@@ -0,0 +1 @@
++# CONFIG_SERIAL is not set
