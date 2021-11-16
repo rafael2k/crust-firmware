@@ -25,4 +25,28 @@ More information:
 <https://github.com/crust-firmware/crust/issues/195#issuecomment-937354035>
 
 
+HDMI CEC
+--------
+
+These platforms seems to have a fully wired HDMI connector,
+and should wakeup by messages sent to them via HDMI CEC bus:
+
+  * a64-olinuxino
+  * a64-olinuxino-emmc
+  * pine64-lts
+  * pine64_plus
+
+
+Serial port
+-----------
+
+These platforms are known to be mainly battery-powered,
+and to save extra power has serial port disabled during suspend:
+
+  * pinebook
+  * pinephone
+  * pinetab
+  * teres_i
+
+
  -- Jonas Smedegaard <dr@jones.dk>  Tue, 16 Nov 2021 00:20:49 +0100

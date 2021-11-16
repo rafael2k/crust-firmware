@@ -14,10 +14,10 @@ platforms_like_generic_a64_axp20x_cec += a64-olinuxino
 platforms_like_generic_a64_axp20x_cec += a64-olinuxino-emmc
 
 # Sunil Mohan Adapa <sunil@medhas.org>
-platforms_like_generic_a64_axp20x += pine64-lts
+platforms_like_generic_a64_axp20x_cec += pine64-lts
 
 # Vagrant Cascadian <vagrant@debian.org>
-platforms_like_generic_a64_axp20x += pine64_plus
+platforms_like_generic_a64_axp20x_cec += pine64_plus
 
 # Vagrant Cascadian <vagrant@debian.org>
 platforms_like_generic_a64_axp20x_no-serial += pinebook
