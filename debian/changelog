@@ -1,3 +1,27 @@
+crust-firmware (0.5-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new release
+
+  [ Jonas Smedegaard ]
+  * update watch file:
+    + fix and gneralize filename mangling
+    + set (currently unused) dversionmangle=auto
+    + use substitution strings
+  * add patch 2001 to add configs for generic platforms
+  * build generic A64 targets,
+    and symlink those for each specific platforms
+  * enable platforms a64-olinuxino a64-olinuxino-emmc pine64-lts,
+    and mention potential testers in source
+  * add README.Debian,
+    covering linux cmdline option clk_ignore_unused
+  * enable cec module
+    for platforms with seemingly fully wired HDMI connector
+    (notably omitting pinebook and teres_i);
+    document HDMI CEC and serial port support in README.Debian
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 16 Nov 2021 19:25:55 +0100
+
 crust-firmware (0.4-3) unstable; urgency=medium
 
   [ Nicolas Boulenguez ]
