@@ -10,7 +10,7 @@ platforms = $(foreach p, a64 a64_axp20x a64_axp20x_cec,\
 platforms_like_generic_a64_axp20x_cec += a64-olinuxino
 
 # Jonas Smedegaard <dr@jones.dk>
-# maybe Philip Rinn <rinni@inventati.org>
+# Philip Rinn <rinni@inventati.org>
 platforms_like_generic_a64_axp20x_cec += a64-olinuxino-emmc
 
 # Sunil Mohan Adapa <sunil@medhas.org>
