@@ -1,0 +1,28 @@
+Crust firmware for Debian
+=========================
+
+Mainline u-boot
+---------------
+
+As documented in upstream README,
+Crust is supported since u-boot v2021.01-rc1.
+
+
+Mainline linux
+--------------
+
+As documented in upstream README,
+Crust needs some small patches not yet mainlined.
+
+A potential alternative is to pass this Linux cmdline option:
+
+    clk_ignore_unused
+
+E.g. add it to variable U_BOOT_PARAMETERS in file </etc/default/u-boot>
+or to variable LINUX_KERNEL_CMDLINE in file </etc/default/flash-kernel>
+
+More information:
+<https://github.com/crust-firmware/crust/issues/195#issuecomment-937354035>
+
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 16 Nov 2021 00:20:49 +0100
