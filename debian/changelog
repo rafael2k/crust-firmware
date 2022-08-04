@@ -1,3 +1,18 @@
+crust-firmware (0.5-2) unstable; urgency=medium
+
+  [ Jonas Smedegaard ]
+  * note Philip Rinn as tester in source
+
+  * Link with --no-warn-rwx-segments. Closes: #1015057
+  * watch: remove unneeded filenamemangle option
+  * upstream/metadata: basic information about upstream contacts
+  * generic_platforms.patch: not forwarded
+  * Standards-Version: 4.6.1
+  * fix lintian override for wrong-section-according-to-package-name
+  * Update copyright years
+
+ -- Nicolas Boulenguez <nicolas@debian.org>  Thu, 04 Aug 2022 12:43:57 +0200
+
 crust-firmware (0.5-1) unstable; urgency=medium
 
   [ upstream ]
