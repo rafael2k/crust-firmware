@@ -1,0 +1,15 @@
+Description: Do not allow a warning to break the build
+Bug-Debian: https://bugs.debian.org/1015057
+Forwarded: https://github.com/crust-firmware/crust/issues/207
+Author: Nicolas Boulenguez <nicolas@debian.org>
+
+--- a/Makefile
++++ b/Makefile
+@@ -81,6 +81,7 @@
+ 		   -Wl,-O1 \
+ 		   -Wl,--build-id=none \
+ 		   -Wl,--fatal-warnings \
++		   -Wl,--no-warn-rwx-segments \
+ 		   -Wl,--gc-sections \
+ 		   -Wl,--no-dynamic-linker \
+ 		   -Wl,--no-undefined
