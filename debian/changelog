@@ -2,6 +2,7 @@ crust-firmware (0.5-3) UNRELEASED; urgency=medium
 
   * Update lintian override info format in d/source/lintian-overrides on line
     2-5.
+  * Set upstream metadata fields: Bug-Submit, Repository-Browse.
 
  -- Debian Janitor <janitor@jelmer.uk>  Tue, 15 Nov 2022 03:40:02 -0000
 
