@@ -1,11 +1,13 @@
-crust-firmware (0.5-3) UNRELEASED; urgency=medium
+crust-firmware (0.5-3) unstable; urgency=medium
 
+  * Standards-Version: 4.6.2.
+
+  [ Jelmer Vernooĳ <jelmer@debian.org> ]
   * Update lintian override info format in d/source/lintian-overrides on line
     2-5.
-  * Set upstream metadata fields: Bug-Submit, Repository-Browse.
-  * Set upstream metadata fields: Repository.
+  * Set upstream metadata fields: Bug-Submit, Repository-Browse, Repository.
 
- -- Debian Janitor <janitor@jelmer.uk>  Tue, 15 Nov 2022 03:40:02 -0000
+ -- Nicolas Boulenguez <nicolas@debian.org>  Thu, 22 Dec 2022 15:17:54 +0000
 
 crust-firmware (0.5-2) unstable; urgency=medium
 
