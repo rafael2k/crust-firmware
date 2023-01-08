@@ -1,3 +1,12 @@
+crust-firmware (0.5-4) UNRELEASED; urgency=medium
+
+  * fix source helper tool copyright-check:
+    + adjust to work with newer Path::Tiny 0.144
+    + avoid insecure shell expansion
+  * update copyright info: update coverage
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 08 Jan 2023 17:18:29 +0100
+
 crust-firmware (0.5-3) unstable; urgency=medium
 
   * Standards-Version: 4.6.2.

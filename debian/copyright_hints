@@ -146,8 +146,8 @@ License: UNKNOWN
 Files
  debian/copyright-check
 Copyright
-  2020-2021, Jonas Smedegaard <dr@jones.dk>
   2020-2021, Purism, SPC
+  2020-2023, Jonas Smedegaard <dr@jones.dk>
   K / /mg;'
   protected nor stating copyright or licensing
 License: GPL-3+
