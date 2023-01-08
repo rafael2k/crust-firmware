@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 2020-2021  Jonas Smedegaard <dr@jones.dk>
+# Copyright 2020-2023  Jonas Smedegaard <dr@jones.dk>
 # Copyright 2020-2021  Purism, SPC
 # Description: helper script to update copyright_hints
 #
@@ -19,6 +19,7 @@
 # Depends:
 #  licensecheck,
 #  libipc-system-simple-perl,
+#  libpath-tiny-perl,
 #  libregexp-assemble-perl,
 #  perl,
 
@@ -38,9 +39,10 @@ _file_regex() {
 		-e '$nonverb_re = Regexp::Assemble->new->add( "\\W+", map { "\\W+(?:$_)\\W+" } @{ $opt{nonverb} } )->as_string;'\
 		-e '@content_re = map { s/\W+/[**]/g; s/\Q[**]\E\d\Q[**]\E/[**]\\S{0,2}[**]/g; s/\Q[**]\E/$nonverb_re/g; qr/$_/ } @license, @grant;'\
 		-e '$inspect = sub {'\
+			-e 'return if $_[0]->is_dir;'\
 			-e '$file = $_[0];'\
 			-e 'if (@firstline_re) {'\
-				-e '($head) = $_[0]->lines( { count => 1 } );'\
+				-e '($head) = $file->lines( { count => 1 } );'\
 				-e 'push @match, quotemeta and return '\
 					-e 'if any { $head =~ $_ } @firstline_re };'\
 			-e 'push @match, quotemeta'\
