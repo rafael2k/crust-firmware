@@ -64,8 +64,8 @@ RE_omit='configs/.*_defconfig'
 RE_SKIP="$RE_omit"
 
 # licensing patterns misdetected by licensecheck
-RE_main=$(_file_regex --grantglob '*' *)
-RE_kconfig=$(_file_regex --grantglob '3rdparty/kconfig/*' *)
+RE_main=$(_file_regex --grantglob '*' -- *)
+RE_kconfig=$(_file_regex --grantglob '3rdparty/kconfig/*' -- *)
 
 # TODO: automate more of this manual cleanup:
 #  * strip garbage copyright holders
